@@ -20,50 +20,6 @@ namespace TemperaturePerCity.Controllers
             _context = context;
         }
 
-        [HttpGet("populate")]
-        public async void Init()
-        {
-            var firstCity = new CityDTO 
-            { 
-                CityName = "Oslo", 
-                Continent = "Europe", 
-                Country = "Norway", 
-                CurrentTime= DateTime.Now, 
-                Temperature=-6 
-            };
-            var secondCity = new CityDTO
-            {
-                CityName = "Osaka",
-                Continent = "Asia",
-                Country = "Japan",
-                CurrentTime = DateTime.Now.AddHours(10),
-                Temperature = 10
-            };
-            var thirdCity = new CityDTO
-            {
-                CityName = "Dakar",
-                Continent = "Africa",
-                Country = "Senegal",
-                CurrentTime = DateTime.Now.AddHours(-1),
-                Temperature = 26
-            };
-            await PostCityDTO(firstCity);
-            await PostCityDTO(secondCity);
-            await PostCityDTO(thirdCity);
-        }
-
-        [HttpGet("continent/{continent}")]
-        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCitiesOrder(string continent)
-        {
-            Console.WriteLine($"Requesting continent {continent}");
-            var list = _context.CityDTO.Where(c => c.Continent.ToLower().Equals(continent.ToLower()));
-            if (!list.Any())
-            {
-                return NotFound($"Could not find cities in the {continent} continent");
-            }
-            return await list.ToListAsync();
-        }
-
         // GET: api/CityDTOes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityDTO>>> GetCityDTO()
@@ -157,6 +113,89 @@ namespace TemperaturePerCity.Controllers
         private bool CityDTOExists(int id)
         {
             return _context.CityDTO.Any(e => e.Id == id);
+        }
+
+        [HttpGet("populate")]
+        public async void Init()
+        {
+            var firstCity = new CityDTO 
+            { 
+                CityName = "Oslo", 
+                Continent = "Europe", 
+                Country = "Norway", 
+                CurrentTime= DateTime.Now, 
+                Temperature=-6 
+            };
+            var secondCity = new CityDTO
+            {
+                CityName = "Osaka",
+                Continent = "Asia",
+                Country = "Japan",
+                CurrentTime = DateTime.Now.AddHours(10),
+                Temperature = 10
+            };
+            var thirdCity = new CityDTO
+            {
+                CityName = "Dakar",
+                Continent = "Africa",
+                Country = "Senegal",
+                CurrentTime = DateTime.Now.AddHours(-1),
+                Temperature = 26
+            };
+            await PostCityDTO(firstCity);
+            await PostCityDTO(secondCity);
+            await PostCityDTO(thirdCity);
+        }
+
+        [HttpGet("continent/{continent}")]
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCitiesOrder(string continent)
+        {
+            var list = _context.CityDTO.Where(c => c.Continent.ToLower().Equals(continent.ToLower()));
+            if (!list.Any())
+            {
+                return NotFound($"Could not find cities in the {continent} continent");
+            }
+            return await list.ToListAsync();
+        }
+
+        [HttpGet("sort/reverse")]
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCitiesInReverseOrder()
+        {
+            var list = _context.CityDTO.Reverse().ToListAsync();
+            return await list;
+        }
+
+        [HttpGet("sort/name")]
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCitiesAlphabetically()
+        {
+            return await _context.CityDTO.OrderBy(c=>c.CityName).ToListAsync();
+        }
+
+        [HttpGet("sort/id")]
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCitiesById()
+        {
+            var list = _context.CityDTO.OrderBy(c => c.Id).ToListAsync();
+            return await list;
+        }
+        [HttpGet("sort/continent")]
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCitiesByContinent()
+        {
+            var list = _context.CityDTO.OrderBy(c=> c.Continent).ToListAsync();
+            return await list;
+        }
+
+        [HttpGet("sort/temperature")]
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCitiesByTemperature()
+        {
+            var list = _context.CityDTO.OrderBy(c=> c.Temperature).ToListAsync();
+            return await list;
+        }
+
+        [HttpGet("sort/time")]
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCitiesByTime()
+        {
+            var list = _context.CityDTO.OrderBy(c=> c.CurrentTime).ToListAsync();
+            return await list;
         }
     }
 }
