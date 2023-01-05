@@ -9,15 +9,59 @@ using TemperaturePerCity.Models;
 
 namespace TemperaturePerCity.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/cities")]
     [ApiController]
-    public class CityDTOesController : ControllerBase
+    public class CityController : ControllerBase
     {
         private readonly CityDb _context;
 
-        public CityDTOesController(CityDb context)
+        public CityController(CityDb context)
         {
             _context = context;
+        }
+
+        [HttpGet("populate")]
+        public async void Init()
+        {
+            var firstCity = new CityDTO 
+            { 
+                CityName = "Oslo", 
+                Continent = "Europe", 
+                Country = "Norway", 
+                CurrentTime= DateTime.Now, 
+                Temperature=-6 
+            };
+            var secondCity = new CityDTO
+            {
+                CityName = "Osaka",
+                Continent = "Asia",
+                Country = "Japan",
+                CurrentTime = DateTime.Now.AddHours(10),
+                Temperature = 10
+            };
+            var thirdCity = new CityDTO
+            {
+                CityName = "Dakar",
+                Continent = "Africa",
+                Country = "Senegal",
+                CurrentTime = DateTime.Now.AddHours(-1),
+                Temperature = 26
+            };
+            await PostCityDTO(firstCity);
+            await PostCityDTO(secondCity);
+            await PostCityDTO(thirdCity);
+        }
+
+        [HttpGet("continent/{continent}")]
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCitiesOrder(string continent)
+        {
+            Console.WriteLine($"Requesting continent {continent}");
+            var list = _context.CityDTO.Where(c => c.Continent.ToLower().Equals(continent.ToLower()));
+            if (!list.Any())
+            {
+                return NotFound($"Could not find cities in the {continent} continent");
+            }
+            return await list.ToListAsync();
         }
 
         // GET: api/CityDTOes
@@ -52,6 +96,16 @@ namespace TemperaturePerCity.Controllers
             }
 
             _context.Entry(cityDTO).State = EntityState.Modified;
+            var cityItem = await _context.CityDTO.FindAsync(id);
+            if (cityItem == null)
+            {
+                return NotFound();
+            }
+            cityItem.CityName= cityDTO.CityName;
+            cityItem.Country= cityDTO.Country;
+            cityItem.Continent= cityDTO.Continent;
+            cityItem.CurrentTime= DateTime.Now;
+            cityItem.Temperature= cityDTO.Temperature;
 
             try
             {
@@ -77,6 +131,7 @@ namespace TemperaturePerCity.Controllers
         [HttpPost]
         public async Task<ActionResult<CityDTO>> PostCityDTO(CityDTO cityDTO)
         {
+            cityDTO.CurrentTime= DateTime.Now;
             _context.CityDTO.Add(cityDTO);
             await _context.SaveChangesAsync();
 

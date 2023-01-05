@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using TemperaturePerCity.Models;
+
 
 namespace TemperaturePerCity.Models
 {
@@ -11,6 +10,6 @@ namespace TemperaturePerCity.Models
 
         public DbSet<City> Cities => Set<City>();
 
-        public DbSet<TemperaturePerCity.Models.CityDTO> CityDTO { get; set; }
+        public DbSet<CityDTO> CityDTO { get; set; }
     }
 }
