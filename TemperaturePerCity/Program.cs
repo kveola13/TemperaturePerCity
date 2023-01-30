@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<CityDb>(opt => opt.UseInMemoryDatabase("CityList"));
-
 builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 
