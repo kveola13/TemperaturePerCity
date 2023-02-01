@@ -7,7 +7,7 @@ env:
   AZURE_WEBAPP_NAME: TemperaturesPerCityApplication
   AZURE_WEBAPP_PACKAGE_PATH: TemperaturePerCity\publish
   AZURE_APIM_RESOURCE_PATH: /
-  AZURE_APIM_RESOURCEGROUP: test-rg
+  AZURE_APIM_RESOURCEGROUP: west-test-rg
   AZURE_APIM_SERVICENAME: TemperaturePerCityapi
   AZURE_APIM_API_ID: TemperaturePerCity
   AZURE_APIM_APPSERVICEURL: https://temperaturespercityapplication.azurewebsites.net
