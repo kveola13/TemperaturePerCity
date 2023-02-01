@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "cosmosdb1": {
+      "type": "cosmosdb",
+      "connectionId": "ConnectionStrings"
+    },
     "apis1": {
       "type": "apis"
     }

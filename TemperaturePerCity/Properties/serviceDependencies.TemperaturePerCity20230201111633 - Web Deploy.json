@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "apis1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/TemperaturePerCity-API/apis/TemperaturePerCity",
+      "type": "apis.azure"
+    },
+    "cosmosdb1": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.DocumentDB/databaseAccounts/west-test-account",
+      "type": "cosmosdb.azure",
+      "connectionId": "ConnectionStrings"
+    }
+  }
+}
