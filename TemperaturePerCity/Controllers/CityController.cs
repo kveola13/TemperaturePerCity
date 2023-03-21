@@ -172,5 +172,8 @@ namespace TemperaturePerCity.Controllers
             var list = _context.CityDTO.OrderBy(c => c.CurrentTime).ToListAsync();
             return await list;
         }
+        public boolean ValidateCity(CityDTO city){
+            return city.CityName != null && city.Continent != null && city.Country != null;
+        }
     }
 }
